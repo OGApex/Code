@@ -1,3 +1,4 @@
+//Credit to void*#7268
 #pragma once
 #include <Windows.h>
 #include <iostream>
