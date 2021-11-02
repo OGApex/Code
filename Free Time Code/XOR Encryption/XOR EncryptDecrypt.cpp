@@ -15,7 +15,7 @@ string CryptDecrypt(string EncryptMessage) {
 
 int main()
 {
-	string Encrypted = CryptDecrypt("Hello, my name is Kirils!");
+	string Encrypted = CryptDecrypt("This message will be encrypted!");
 	cout << "The encrypted text is: " << Encrypted << "\n";
 	string Decrypted = CryptDecrypt(Encrypted);
 	cout << "The decrypted text is: " << Decrypted << "\n";
