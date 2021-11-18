@@ -4,6 +4,7 @@ waitFor = function(n){
 	});
 };
 
+
 (function(){
 
 	var answers = {};
@@ -14,35 +15,113 @@ waitFor = function(n){
 				{
 					text: "I need a holiday recommendation",
 					reply_text: "I need a holiday recommendation!",
-					next_question: "weather"
-				},
-				{
-					text: "Cancel",
-					reply_text: " ",
-					next_question: "weather"
-				},
+					next_question: "temperature"
+				},				
 			]
 		},
-		weather:{
-			text:"What kind of weather do you like?",
+		temperature:{
+			text:"What kind of temperature do you like?",
 			options:[
 				{
-					text: "Cold",
+					text: "cold",
 					reply_text: "Cold",
-					next_question: "time"
+					next_question: "rating"
 				},
 				{
-					text: "Warm",
-					reply_text: "Warm",
-					next_question: "time"
+					text: "mild",
+					reply_text: "Mild",
+					next_question: "rating"
 				},
 				{
-					text: "Hot",
+					text: "hot",
 					reply_text: "Hot",
-					next_question: "time"
+					next_question: "rating"
 				}
 			]
 		},	
+		rating:{
+			text:"What hotel rating are you looking for?",
+			options:[
+				{
+					text: "3",
+					reply_text: "3*",
+					next_question: "continent"
+				},
+				{
+					text: "4",
+					reply_text: "4*",
+					next_question: "continent"
+				},
+				{
+					text: "5",
+					reply_text: "5*",
+					next_question: "continent"
+				}
+			]
+		},
+		continent:{
+			text:"What continent are you looking to go to?",
+			options:[
+				{
+					text: "North America",
+					reply_text: "North America",
+					next_question: "price"
+				},
+				{
+					text: "Europe",
+					reply_text: "Europe",
+					next_question: "price"
+				},
+				{
+					text: "Asia",
+					reply_text: "Asia",
+					next_question: "price"
+				},
+				{
+					text: "Arctic",
+					reply_text: "Arctic",
+					next_question: "price"
+				},
+				{
+					text: "Antarctica",
+					reply_text: "Antarctica",
+					next_question: "price"
+				},
+				{
+					text: "Australia",
+					reply_text: "Australia",
+					next_question: "price"
+				},
+				{
+					text: "Africa",
+					reply_text: "Africa",
+					next_question: "price"
+				}
+			]
+		},
+		price:{
+			text:"What is your budget per night?",
+			options:[
+				{
+					text: "50",
+					reply_text: "50$ or less per night",
+					next_question: "result"
+				},
+				{
+					text: "100",
+					reply_text: "100$ or less per night",
+					next_question: "result"
+				},
+				{
+					text: "120",
+					reply_text: "120$ or more per night",
+					next_question: "result"
+				}
+			]
+		},
+		result:{
+			text:"Result",
+		}
 	};
 
 	// chat area
@@ -53,7 +132,7 @@ waitFor = function(n){
 
 		var message_node = function(type,data){
 			var node = $($('template[class=message-'+type+']').html()).clone();
-			console.log(type,data);
+			console.log("first log", type,data);
 			node.find('.text').text(data.text);
 
 			if(data.options){
@@ -69,7 +148,8 @@ waitFor = function(n){
 
 						var msg = message_node("me",{
 							text:btn_data.reply_text
-						});
+						});										
+					
 
 						chat_el.find('.messages').append(msg);
 						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
@@ -78,14 +158,33 @@ waitFor = function(n){
 
 						chat_el.find('.messages').append(msg);
 						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
-					});
 
+					});
 					node.find('.options-list').append(btn_node);
 				}
 			}
 
 			return node;
 		}
+		
+		const request = (url, params = {}, method = "GET") => {
+			let options = {
+			  method
+			};
+			if ("GET") {
+			  url += "?action=holiday_fetch&" + new URLSearchParams(params).toString();
+			}
+		  
+			const result = fetch(url, options).then((response) => response.json());
+
+			return result;
+		  };
+		  const get = (url, params) => request(url, params, "GET");
+		  
+		  get('http://localhost:777/v1.0', { temperature: "cold", rating: "4", continent: "Antarctica", price: "130" })
+			.then( response => {
+				console.log(response);
+			});
 
 		current_question = questions.intro;
 

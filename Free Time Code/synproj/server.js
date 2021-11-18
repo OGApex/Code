@@ -14,23 +14,20 @@ global.parseResponse = function(type,data={}){
 	}
 };
 
-app.use(express.static('www'));
+app.use(express.static('./www'));
+
 
 (function(){
 	app.get('/v1.0', async function (req, res) {
-		var body;
 		var action = req.query.action;
-
 		switch(action){
-			case "dconsApi":
-			case "getArticles":
+            case "holiday_fetch":
 				var script = './scripts/'+action+'.js';
 				console.log("Calling Action:",action);
-
 				try {
 					decache(script);
 					var result = await require(script)(req);
-
+                    console.log("result", req.params);
 					res.send(result);
 				}
 				catch(e){
@@ -39,7 +36,6 @@ app.use(express.static('www'));
 				}
 
 				return;
-			break;
 			default:
 				res.send(parseResponse("failure_action_invalid"));
 			break;
