@@ -167,21 +167,26 @@ waitFor = function(n){
 			return node;
 		}
 		
-		const request = (url, params = {}, method = "GET") => {
+		const request = ( url, params = {}, method = 'GET' ) => {
 			let options = {
-			  method
+				method,
+				headers:[]
 			};
-			if ("GET") {
-			  url += "?action=holiday_fetch&" + new URLSearchParams(params).toString();
-			}
+			if ( 'GET' === method ) {
+				url += '?action=holiday_fetch&' + ( new URLSearchParams( params ) ).toString();
+				options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+			} else {
+				options.body = JSON.stringify( params );
+				options.headers['Content-Type'] = 'application/json';
+			} 
+			
+			return fetch( url, options ).then( response => response.json() );
+		};
+		
+		const get = ( url, params ) => request( url, params, 'GET' );
+		const post = ( url, params ) => request( url, params, 'POST' );
 		  
-			const result = fetch(url, options).then((response) => response.json());
-
-			return result;
-		  };
-		  const get = (url, params) => request(url, params, "GET");
-		  
-		  get('http://localhost:777/v1.0', { temperature: "cold", rating: "4", continent: "Antarctica", price: "130" })
+		post('http://localhost:777/v1.0', { temperature: "cold", rating: "4", continent: "Antarctica", price: "130" })
 			.then( response => {
 				console.log(response);
 			});

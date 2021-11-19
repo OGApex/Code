@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 
 
 app.use(cookieParser());
+app.use(express.json());
 
 global.parseResponse = function(type,data={}){
 	return {
@@ -18,7 +19,7 @@ app.use(express.static('./www'));
 
 
 (function(){
-	app.get('/v1.0', async function (req, res) {
+	app.post('/v1.0', async function (req, res) {
 		var action = req.query.action;
 		switch(action){
             case "holiday_fetch":
