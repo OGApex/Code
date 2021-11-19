@@ -10,50 +10,57 @@ waitFor = function(n){
 	var answers = {};
 	var questions = {
 		intro:{
-			text:"Hello, what can I help you with today?",
-			options:[
-				{
-					text: "I need a holiday recommendation",
-					reply_text: "I need a holiday recommendation!",
-					next_question: "temperature"
-				},				
-			]
-		},
+            text:"Hello, what can I help you with today?",
+            options:[
+                {
+                    response:"",
+                    text: "I need a holiday recommendation",
+                    reply_text: "I need a holiday recommendation!",
+                    next_question: "temperature"
+                },                
+            ]
+        },
 		temperature:{
-			text:"What kind of temperature do you like?",
-			options:[
-				{
-					text: "cold",
-					reply_text: "Cold",
-					next_question: "rating"
-				},
-				{
-					text: "mild",
-					reply_text: "Mild",
-					next_question: "rating"
-				},
-				{
-					text: "hot",
-					reply_text: "Hot",
-					next_question: "rating"
-				}
-			]
-		},	
+            text:"What kind of temperature do you like?",
+            options:[
+                {
+                    response:"cold",
+                    text: "Cold weather",
+                    reply_text: "Cold",
+                    next_question: "rating"
+                },
+                {
+                    response:"mild",
+                    text: "Warm weather",
+                    reply_text: "Mild",
+                    next_question: "rating"
+                },
+                {
+                    response:"hot",
+                    text: "Hot weather",
+                    reply_text: "Hot",
+                    next_question: "rating"
+                }
+            ]
+        },   
 		rating:{
 			text:"What hotel rating are you looking for?",
 			options:[
 				{
-					text: "3",
+					response: "3",
+					text: "3*",
 					reply_text: "3*",
 					next_question: "continent"
 				},
 				{
-					text: "4",
+					response: "4",
+					text: "4*",
 					reply_text: "4*",
 					next_question: "continent"
 				},
 				{
-					text: "5",
+					response: "5",
+					text: "5*",
 					reply_text: "5*",
 					next_question: "continent"
 				}
@@ -62,37 +69,44 @@ waitFor = function(n){
 		continent:{
 			text:"What continent are you looking to go to?",
 			options:[
-				{
+				{	
+					response: "North America",
 					text: "North America",
 					reply_text: "North America",
 					next_question: "price"
 				},
 				{
+					response: "Europe",
 					text: "Europe",
 					reply_text: "Europe",
 					next_question: "price"
 				},
 				{
+					response: "Asia",
 					text: "Asia",
 					reply_text: "Asia",
 					next_question: "price"
 				},
 				{
+					response: "Arctic",
 					text: "Arctic",
 					reply_text: "Arctic",
 					next_question: "price"
 				},
 				{
+					response: "Antarctica",
 					text: "Antarctica",
 					reply_text: "Antarctica",
 					next_question: "price"
 				},
 				{
+					response: "Australia",
 					text: "Australia",
 					reply_text: "Australia",
 					next_question: "price"
 				},
 				{
+					response: "Africa",
 					text: "Africa",
 					reply_text: "Africa",
 					next_question: "price"
@@ -103,17 +117,20 @@ waitFor = function(n){
 			text:"What is your budget per night?",
 			options:[
 				{
-					text: "50",
+					response: "50",
+					text: "50$ or less per night",
 					reply_text: "50$ or less per night",
 					next_question: "result"
 				},
 				{
-					text: "100",
+					response: "100",
+					text: "100$ or less per night",
 					reply_text: "100$ or less per night",
 					next_question: "result"
 				},
 				{
-					text: "120",
+					response: "120",
+					text: "120$ or more per night",
 					reply_text: "120$ or more per night",
 					next_question: "result"
 				}
@@ -169,6 +186,7 @@ waitFor = function(n){
 			console.log("first log", type,data);
 			node.find('.text').text(data.text);
 
+
 			if(data.options){
 				node.find('.options-list').fadeIn(300);
 				for(let option of data.options){
@@ -180,6 +198,10 @@ waitFor = function(n){
 						console.log("btn_data", btn_data);
 						node.find('.options-list').hide();
 						query[question] = data.text;
+
+						if(option.response){
+							query[question] = option.response;
+						}
 
 						let msg = add_message("me", btn_data.reply_text);
 
@@ -198,11 +220,11 @@ waitFor = function(n){
 					node.find('.options-list').append(btn_node);
 				}
 			} else {
-				post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query})
-					.then( response => {
-						console.log(response);					
-  					});
-			}
+				post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
+				  console.log(response);
+				  add_message("agent", "City: " + response[0].continent);
+				});
+			  }
 			return node;
 		}
 
