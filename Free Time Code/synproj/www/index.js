@@ -12,8 +12,8 @@ waitFor = function(n){
 		intro:{
             text:"Hello, what can I help you with today?",
             options:[
-                {
-                    response:"",
+                {               
+					response: "",  
                     text: "I need a holiday recommendation",
                     reply_text: "I need a holiday recommendation!",
                     next_question: "temperature"
@@ -26,19 +26,19 @@ waitFor = function(n){
                 {
                     response:"cold",
                     text: "Cold weather",
-                    reply_text: "Cold",
+                    reply_text: "Cold weather",
                     next_question: "rating"
                 },
                 {
                     response:"mild",
                     text: "Warm weather",
-                    reply_text: "Mild",
+                    reply_text: "Warm weather",
                     next_question: "rating"
                 },
                 {
                     response:"hot",
                     text: "Hot weather",
-                    reply_text: "Hot",
+                    reply_text: "Hot weather",
                     next_question: "rating"
                 }
             ]
@@ -164,17 +164,11 @@ waitFor = function(n){
 		};
 		
 		const get = ( url, params ) => request( url, params, 'GET' );
-		const post = ( url, params ) => request( url, params, 'POST' );
-		  
-		post('http://localhost:777/v1.0', { action: "holiday_fetch", params:{ temperature: "cold", rating: "4", continent: "Antarctica", price: "130" }})
-			.then( response => {
-				console.log(response);
-			});
+		const post = ( url, params ) => request( url, params, 'POST' );		
 
 		var add_message = (type, text) => {
 			var node = $($('template[class=message-'+type+']').html()).clone();
 			  
-			console.log("add message: ", type, text);
 			node.find('.text').text(text);
 			return node;
 		}
@@ -183,7 +177,6 @@ waitFor = function(n){
 			let data = questions[question];
 			var node = add_message(type, data.text)
 			
-			console.log("first log", type,data);
 			node.find('.text').text(data.text);
 
 
@@ -195,9 +188,7 @@ waitFor = function(n){
 
 					btn_node.on('click',async function(){
 						let btn_data = $(this).data('node_data');
-						console.log("btn_data", btn_data);
 						node.find('.options-list').hide();
-						query[question] = data.text;
 
 						if(option.response){
 							query[question] = option.response;
@@ -221,8 +212,7 @@ waitFor = function(n){
 				}
 			} else {
 				post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
-				  console.log(response);
-				  add_message("agent", "City: " + response[0].continent);
+				  console.log("response", response);
 				});
 			  }
 			return node;

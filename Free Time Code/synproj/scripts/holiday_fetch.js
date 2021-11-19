@@ -41,11 +41,7 @@ module.exports = (function(params){
 					}							
 				}		
 			}
-
-
-
-
-
+			
 			cb({
 				type: "success",
 				holiday:final_holidays
