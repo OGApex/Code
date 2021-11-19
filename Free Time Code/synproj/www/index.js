@@ -149,7 +149,8 @@ waitFor = function(n){
 						var msg = message_node("me",{
 							text:btn_data.reply_text
 						});										
-					
+						
+						
 
 						chat_el.find('.messages').append(msg);
 						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
@@ -186,7 +187,7 @@ waitFor = function(n){
 		const get = ( url, params ) => request( url, params, 'GET' );
 		const post = ( url, params ) => request( url, params, 'POST' );
 		  
-		post('http://localhost:777/v1.0', { action: "holiday_fetch", temperature: "cold", rating: "4", continent: "Antarctica", price: "130" })
+		post('http://localhost:777/v1.0', { action: "holiday_fetch", params:{ temperature: "cold", rating: "4", continent: "Antarctica", price: "130" }})
 			.then( response => {
 				console.log(response);
 			});

@@ -18,10 +18,10 @@ function normalize_key(key){
 	return key;
 }
 
-module.exports = (function(req){
+module.exports = (function(params){
     return new Promise(async function(cb){
 		try {
-			var inputs = req.query;
+			var inputs = params;
 			var temperature = inputs.temperature;
 			var price = inputs.price;
 			var continent = inputs.continent;

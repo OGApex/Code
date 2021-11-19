@@ -27,8 +27,8 @@ app.use(express.static('./www'));
 				console.log("Calling Action:",action);
 				try {
 					decache(script);
-					var result = await require(script)(req);
-                    console.log("result", req.params);
+					var result = await require(script)(req.body.params);
+                    console.log("result", req.body);
 					res.send(result);
 				}
 				catch(e){
