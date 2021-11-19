@@ -128,46 +128,9 @@ waitFor = function(n){
 	(async function(){
 		var container = $('#chat-popup');
 		var chat_el = container.find('.mainwindow');
-		var current_question = {};		
+		var current_question = {};	
+		var query = {};	
 
-		var message_node = function(type,data){
-			var node = $($('template[class=message-'+type+']').html()).clone();
-			console.log("first log", type,data);
-			node.find('.text').text(data.text);
-
-			if(data.options){
-				node.find('.options-list').fadeIn(300);
-				for(var option of data.options){
-					var btn_node = $('<button class="btn btn-dark mb-1">'+option.text+'</button>');
-					btn_node.data('node_data',option);
-
-					btn_node.on('click',async function(){
-						var btn_data = $(this).data('node_data');
-						console.log("btn_data", btn_data);
-						node.find('.options-list').hide();
-
-						var msg = message_node("me",{
-							text:btn_data.reply_text
-						});										
-						
-						
-
-						chat_el.find('.messages').append(msg);
-						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
-
-						var msg = message_node("agent",questions[btn_data.next_question]);
-
-						chat_el.find('.messages').append(msg);
-						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
-
-					});
-					node.find('.options-list').append(btn_node);
-				}
-			}
-
-			return node;
-		}
-		
 		const request = ( url, params = {}, method = 'GET' ) => {
 			let options = {
 				method,
@@ -192,6 +155,44 @@ waitFor = function(n){
 				console.log(response);
 			});
 
+		var message_node = function(type,question){
+			var node = $($('template[class=message-'+type+']').html()).clone();
+			let data = questions[question];
+			console.log("first log", type,data);
+			node.find('.text').text(data.text);
+
+			if(data.options){
+				node.find('.options-list').fadeIn(300);
+				for(let option of data.options){
+					let btn_node = $('<button class="btn btn-dark mb-1"></button>').text(option.text);
+					btn_node.data('node_data',option);
+
+					btn_node.on('click',async function(){
+						let btn_data = $(this).data('node_data');
+						console.log("btn_data", btn_data);
+						node.find('.options-list').hide();
+						query[question] = data.text;
+
+						let msg = message_node("me",{
+							text:btn_data.reply_text
+						});																				
+
+						chat_el.find('.messages').append(msg);
+						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+
+						msg = message_node("agent",btn_data.next_question);
+
+						chat_el.find('.messages').append(msg);
+						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+
+					});
+					node.find('.options-list').append(btn_node);
+				}
+			}
+
+			return node;
+		}
+		
 		current_question = questions.intro;
 
 		var msg = message_node("agent",current_question);
