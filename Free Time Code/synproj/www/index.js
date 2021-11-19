@@ -128,7 +128,6 @@ waitFor = function(n){
 	(async function(){
 		var container = $('#chat-popup');
 		var chat_el = container.find('.mainwindow');
-		var current_question = {};	
 		var query = {};	
 
 		const request = ( url, params = {}, method = 'GET' ) => {
@@ -155,9 +154,18 @@ waitFor = function(n){
 				console.log(response);
 			});
 
-		var message_node = function(type,question){
+		var add_message = (type, text) => {
 			var node = $($('template[class=message-'+type+']').html()).clone();
+			  
+			console.log("add message: ", type, text);
+			node.find('.text').text(text);
+			return node;
+		}
+
+		var message_node = function(type,question){
 			let data = questions[question];
+			var node = add_message(type, data.text)
+			
 			console.log("first log", type,data);
 			node.find('.text').text(data.text);
 
@@ -173,9 +181,10 @@ waitFor = function(n){
 						node.find('.options-list').hide();
 						query[question] = data.text;
 
-						let msg = message_node("me",{
-							text:btn_data.reply_text
-						});																				
+						let msg = add_message("me", btn_data.reply_text);
+
+						chat_el.find('.messages').append(msg);
+						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;									
 
 						chat_el.find('.messages').append(msg);
 						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
@@ -188,14 +197,17 @@ waitFor = function(n){
 					});
 					node.find('.options-list').append(btn_node);
 				}
+			} else {
+				post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query})
+					.then( response => {
+						console.log(response);					
+  					});
 			}
-
 			return node;
 		}
-		
-		current_question = questions.intro;
 
-		var msg = message_node("agent",current_question);
+
+		var msg = message_node("agent", "intro");
 		chat_el.find('.messages').append(msg);
 
 		chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
