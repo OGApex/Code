@@ -20,7 +20,7 @@ app.use(express.static('./www'));
 
 (function(){
 	app.post('/v1.0', async function (req, res) {
-		var action = req.query.action;
+		var action = req.body.action;
 		switch(action){
             case "holiday_fetch":
 				var script = './scripts/'+action+'.js';
