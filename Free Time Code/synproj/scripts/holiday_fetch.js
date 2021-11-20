@@ -39,9 +39,9 @@ module.exports = (function(params){
 						}
 					}							
 				}		
-			}
-			var andSentence = ["or"],
-			beginSentence = ["the following vacations matched your criteria:"];
+			}			
+			var beginSentence = "The following vacations matched your criteria:";
+			var andSentence = "or";
 			var reply = '';
 			for(let i in final_holidays){
 				let holiday = final_holidays[i];
@@ -59,8 +59,7 @@ module.exports = (function(params){
 					reply = reply.replaceAll('@' + key + '@', holiday[key]);
 				}
 			}
-		
-			console.log(reply);
+
 			if (final_holidays.length == 0){
 				reply = "No holidays match your criteria.";
 			}

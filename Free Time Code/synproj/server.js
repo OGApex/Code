@@ -1,17 +1,13 @@
 const express = require('express');
 const fs = require('fs');
-const decache = require('decache');
 const app = express();
-const cookieParser = require('cookie-parser');
 
-
-app.use(cookieParser());
 app.use(express.json());
 
 global.parseResponse = function(type,data={}){
 	return {
 		type,
-		...data
+		...data //replaces whatever is in the data object, basically like merging whatever is in the data={} obj
 	}
 };
 
@@ -26,7 +22,6 @@ app.use(express.static('./www'));
 				var script = './scripts/'+action+'.js';
 				console.log("Calling Action:",action);
 				try {
-					decache(script);
 					var result = await require(script)(req.body.params);
 					res.send(result);
 				}

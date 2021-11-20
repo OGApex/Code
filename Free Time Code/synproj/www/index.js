@@ -175,9 +175,9 @@ waitFor = function(n){
 
 		var message_node = function(type,question){
 			let data = questions[question];
-			var node = add_message(type, data.text)
-			
-			node.find('.text').text(data.text);
+			if(data.text != ""){
+				var node = add_message(type, data.text)
+				node.find('.text').text(data.text);
 
 
 			if(data.options){
@@ -192,15 +192,13 @@ waitFor = function(n){
                             query[question] = option.response;
                         }
 
-                        let msg = add_message("me", option.reply_text);
-
-                        chat_el.find('.messages').append(msg);
-                        chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;                                    
+                        let msg = add_message("me", option.reply_text);                                
 
                         chat_el.find('.messages').append(msg);
                         chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
 						
 						msg = message_node("agent",option.next_question);
+
 
                         chat_el.find('.messages').append(msg);
                         chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
@@ -209,15 +207,18 @@ waitFor = function(n){
                     });
                     node.find('.options-list').append(btn_node);
                 }
-            } else {
+            } 
+            
+			} else {
                 post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
 				console.log(response);
 				let msg = add_message("agent", response.reply);
 				chat_el.find('.messages').append(msg);
                 chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
-				});
-            
-			}		  
+				});		  
+			}
+			
+			
 			return node;		
 
 		}
