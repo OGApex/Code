@@ -40,27 +40,27 @@ module.exports = (function(params){
 					}							
 				}		
 			}
-			var andSentence = ["and"],
-			beginSentence = ["Hey so we found"];
-			var replies = ["the ideal holiday: @HotelName@ @City@ @Country@"];
+			var andSentences = ["Also check out", "Here's another one, ", "You might also like to see", "Here's something else for you: ", "and"],
+			beginSentences = ["Hey so we found", "Checkout", "Here's a nice place you can checkout! Look at"];
+			var replies = [
+				"this ideal holiday: @HotelName@ @City@ @Country@",
+				"this holiday stay: @HotelName@ in @City@, @Country@. Temps are @TempRating@",
+				"this great place you should checkout: @HotelName@ and its got @TempRating@ weather."
+			];
 			var reply = '';
-			for(let i = 0; i < final_holidays.length; i++){
+			for(let i in final_holidays){
 				let holiday = final_holidays[i];
 
-
 				if(i == 0){
-					reply += beginSentence + ' ';
+					reply += beginSentences[Math.random() * beginSentences.length | 0] + ' ';
 				} else if(i < final_holidays.length - 1){
-					reply += andSentence + ' ';
+					reply += andSentences[Math.random() * andSentences.length | 0] + ' ';
 				}
-				reply += replies;
+				reply += replies[Math.random() * replies.length | 0];
 
 				for(let key in holiday){
 					reply = reply.replaceAll('@' + key + '@', holiday[key]);
 				}
-
-				console.log(i);
-				console.log(reply);
 			}
 		
 			console.log(reply);
