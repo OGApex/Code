@@ -137,7 +137,7 @@ waitFor = function(n){
 			]
 		},
 		result:{
-			text:"Result",
+			text:"Result",			
 		}
 	};
 
@@ -210,7 +210,7 @@ waitFor = function(n){
                 }
             } else {
                 post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
-                  console.log("response", response);
+					
                 });
               }			  
 			return node;
