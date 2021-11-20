@@ -36,16 +36,44 @@ module.exports = (function(params){
 						if(holiday[normalize_key('continent')] == continent){
 							if(parseInt(holiday[normalize_key('price')]) <= price || price >= 120)
 							final_holidays.push(holiday);	
-							console.log(final_holidays);
 						}
 					}							
 				}		
 			}
-			
-			cb({
-				type: "success",
-				holiday:final_holidays
-			})
+			var andSentence = ["and"],
+			beginSentence = ["Hey so we found"];
+			var replies = ["the ideal holiday: @HotelName@ @City@ @Country@"];
+			var reply = '';
+			for(let i = 0; i < final_holidays.length; i++){
+				let holiday = final_holidays[i];
+
+
+				if(i == 0){
+					reply += beginSentence + ' ';
+				} else if(i < final_holidays.length - 1){
+					reply += andSentence + ' ';
+				}
+				reply += replies;
+
+				for(let key in holiday){
+					reply = reply.replaceAll('@' + key + '@', holiday[key]);
+				}
+
+				console.log(i);
+				console.log(reply);
+			}
+		
+			console.log(reply);
+			if (final_holidays.length == 0){
+				reply = "No holidays match your criteria.";
+			}
+
+		cb({
+		type: "success",
+		holiday:final_holidays,
+		reply:reply
+
+		});
 
 		}
 		catch(e){

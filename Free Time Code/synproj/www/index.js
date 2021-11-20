@@ -181,40 +181,38 @@ waitFor = function(n){
 
 
 			if(data.options){
-				node.find('.options-list').fadeIn(300);
-				for(let option of data.options){
-					let btn_node = $('<button class="btn btn-dark mb-1"></button>').text(option.text);
-					btn_node.data('node_data',option);
+                node.find('.options-list').fadeIn(300);
+                for(let option of data.options){
+                    let btn_node = $('<button class="btn btn-dark mb-1"></button>').text(option.text);
 
-					btn_node.on('click',async function(){
-						let btn_data = $(this).data('node_data');
-						node.find('.options-list').hide();
+                    btn_node.on('click',async function(){
+                        node.find('.options-list').hide();
 
-						if(option.response){
-							query[question] = option.response;
-						}
+                        if(option.response){
+                            query[question] = option.response;
+                        }
 
-						let msg = add_message("me", btn_data.reply_text);
+                        let msg = add_message("me", option.reply_text);
 
-						chat_el.find('.messages').append(msg);
-						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;									
+                        chat_el.find('.messages').append(msg);
+                        chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;                                    
 
-						chat_el.find('.messages').append(msg);
-						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+                        chat_el.find('.messages').append(msg);
+                        chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
 
-						msg = message_node("agent",btn_data.next_question);
+                        msg = message_node("agent",option.next_question);
 
-						chat_el.find('.messages').append(msg);
-						chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+                        chat_el.find('.messages').append(msg);
+                        chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
 
-					});
-					node.find('.options-list').append(btn_node);
-				}
-			} else {
-				post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
-				  console.log("response", response);
-				});
-			  }
+                    });
+                    node.find('.options-list').append(btn_node);
+                }
+            } else {
+                post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
+                  console.log("response", response);
+                });
+              }			  
 			return node;
 		}
 
