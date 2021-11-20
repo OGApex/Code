@@ -41,7 +41,7 @@ module.exports = (function(params){
 				}		
 			}
 			var andSentence = ["or"],
-			beginSentence = ["Hello, the following vacations matched your criteria:"];
+			beginSentence = ["the following vacations matched your criteria:"];
 			var reply = '';
 			for(let i in final_holidays){
 				let holiday = final_holidays[i];

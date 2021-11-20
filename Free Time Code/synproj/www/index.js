@@ -120,24 +120,24 @@ waitFor = function(n){
 					response: "50",
 					text: "50$ or less per night",
 					reply_text: "50$ or less per night",
-					next_question: "result"
+					next_question: "result",
 				},
 				{
 					response: "100",
 					text: "100$ or less per night",
 					reply_text: "100$ or less per night",
-					next_question: "result"
+					next_question: "result",
 				},
 				{
 					response: "120",
 					text: "120$ or more per night",
 					reply_text: "120$ or more per night",
-					next_question: "result"
+					next_question: "result",
 				}
 			]
 		},
 		result:{
-			text:"Result",			
+			text:"",
 		}
 	};
 
@@ -199,26 +199,30 @@ waitFor = function(n){
 
                         chat_el.find('.messages').append(msg);
                         chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
-
-                        msg = message_node("agent",option.next_question);
+						
+						msg = message_node("agent",option.next_question);
 
                         chat_el.find('.messages').append(msg);
                         chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+					
 
                     });
                     node.find('.options-list').append(btn_node);
                 }
             } else {
                 post('http://localhost:777/v1.0', { action: "holiday_fetch", params:query}).then( response => {
-					
-                });
-              }			  
-			return node;
+				console.log(response);
+				let msg = add_message("agent", response.reply);
+				chat_el.find('.messages').append(msg);
+                chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
+				});
+            
+			}		  
+			return node;		
+
 		}
-
-
 		var msg = message_node("agent", "intro");
-		chat_el.find('.messages').append(msg);
+		chat_el.find('.messages').append(msg);		
 
 		chat_el.find('.messages-area')[0].scrollTop = chat_el.find('.messages-area')[0].scrollHeight;
 	})();
